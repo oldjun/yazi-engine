@@ -1,10 +1,11 @@
 #include "PluginHelper.h"
-#include "Singleton.h"
-#include "Logger.h"
-#include "IniFile.h"
-
-using namespace yazi::utility;
 using namespace yazi::engine;
+
+#include "Logger.h"
+#include "System.h"
+#include "Singleton.h"
+using namespace yazi::utility;
+
 
 PluginHelper::PluginHelper()
 {
@@ -27,9 +28,8 @@ void PluginHelper::load(const string & plugin)
         return;
     }
 
-    IniFile * conf = Singleton<IniFile>::instance();
-    string root = (*conf)["root"]["path"];
-    string filename = root + "/plugin/" + plugin;
+    System * sys = Singleton<System>::instance();
+    string filename = sys->get_root_path() + "/plugin/" + plugin;
     void *handle = dlopen(filename.c_str(), RTLD_GLOBAL | RTLD_LAZY);
     if (handle == NULL)
     {
