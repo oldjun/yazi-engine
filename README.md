@@ -97,8 +97,11 @@ int age = holder.get<int>("age");
 ## How to run the work
 ```c++
 #include <iostream>
-#include "Logger.h"
-#include "IniFile.h"
+#include <string>
+#include <stdio.h>
+using namespace std;
+
+#include "System.h"
 #include "Singleton.h"
 using namespace yazi::utility;
 
@@ -107,20 +110,12 @@ using namespace yazi::engine;
 
 int main()
 {
-    // get the program's root path
-    string root_path = get_root_path();
-
-    // initialize the global logger
-    Logger::instance()->open(root_path + "/main.log");
-
-    // initialize the ini file
-    IniFile * conf = Singleton<IniFile>::instance();
-    conf->load(root_path + "/main.ini");
-    conf->set("root", "path", root_path);
+    System * sys = Singleton<System>::instance();
+    sys->init();
 
     // initialize the work flow
     Workflow * workflow = Singleton<Workflow>::instance();
-    workflow->load(root_path + "/workflow.xml");
+    workflow->load(sys->get_root_path() + "/workflow.xml");
 
     const string & input = "this is input";
 
